@@ -1,0 +1,29 @@
+version: '3.3'
+
+services:
+  db:
+    image: mysql:5.7
+    environment:
+      #our database name
+      MYSQL_DATABASE: 'delivery_service'
+      MYSQL_USER: 'user'
+      MYSQL_PASSWORD: 'user'
+      #root access
+      MYSQL_ROOT_PASSWORD: 'root'
+    ports:
+      - 3306:3306
+    volumes:
+      - db:/var/lib/mysql
+
+  web:
+    build: .
+    command: python /src/manage.py runserver 0.0.0.0:80 --noreload
+    volumes:
+      - ./src:/src
+    ports:
+      - 80:80
+    depends_on:
+      - db
+
+volumes:
+  db:
