@@ -5,3 +5,5 @@ Because we use docker.
 
 To start server use:
 `sudo docker-compose up`
+
+Result will be in `http://127.0.0.1:80/`
