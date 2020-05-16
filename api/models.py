@@ -23,10 +23,10 @@ class Restaurant(models.Model):
 	SeoSectionSecond = models.TextField()
 	Type = models.CharField(max_length=12)#simple/dark-kitchen/both
 	#TypeOfCusine = 
-	SliderImgBigEng = models.FileField(upload_to="uploads/eng/big/")
-	SliderImgSmallEng = models.FileField(upload_to="uploads/eng/small/")
-	SliderImgBigSecond = models.FileField(upload_to="uploads/second/big/")
-	SliderImgSmallSecond = models.FileField(upload_to="uploads/second/small")
+	SliderImgBigEng = models.ImageField(upload_to="uploads/eng/big/")
+	SliderImgSmallEng = models.ImageField(upload_to="uploads/eng/small/")
+	SliderImgBigSecond = models.ImageField(upload_to="uploads/second/big/")
+	SliderImgSmallSecond = models.ImageField(upload_to="uploads/second/small")
 
 #additional ingredient
 class Topping(models.Model):
@@ -57,15 +57,36 @@ class TimePeriod(models.Model):
 	# 6 - Sunday
 	DaysOfWeek = models.CharField(max_length=128)
 
+# https://habr.com/ru/post/313764/
+# https://docs.djangoproject.com/en/3.0/topics/auth/customizing/
+#using one to one connection
 class Client(models.Model):
-	pass
+	User = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+
+	Name = models.CharField(max_length=128)
+	Surname = models.CharField(max_length=128)
+	Phone = models.CharField(max_length=16)
+	#auto_now_add=True 
+	#Automatically set the field to now when the object is first created.
+	RegisterData = models.DateTimeField(auto_now_add=True)
+	LastLoginDate = models.DateTimeField(auto_now_add=True)
 
 class DeliveryAddress(models.Model):
 	#if client removed - remove address releated with him
 	#many DeliveryAddress to one Client
 	Client = models.ForeignKey(Client, on_delete=models.CASCADE)
+	Street = models.CharField(max_length=128)
+	HouseName = models.CharField(max_length=128)
+	Flat = models.CharField(max_length=128)
+	Floor = models.CharField(max_length=128)
+	Comment = models.TextField()
+	AddingDate = models.DateTimeField(auto_now_add=True)
 
 class CreditCard(models.Model):
 	#if client removed - remove CreditCard releated with him
 	#many CreditCard to one Client
 	Client = models.ForeignKey(Client, on_delete=models.CASCADE)
+	CardToken = models.CharField(max_length=256)
+	CardType = models.CharField(max_length=128) #Visa/mastercard/american express
+	LastFourDigits = models.CharField(max_length=4)
+	AddingDate = models.DateTimeField(auto_now_add=True)
