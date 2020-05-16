@@ -1,4 +1,5 @@
 from django.db import models
+from django.conf import settings
 
 # Create your models here.
 
@@ -42,8 +43,33 @@ class Accompaniments(models.Model)
 	PricePurchase = models.FloatField()
 	PriceSell = models.FloatField()
 
+#contains OrderPosition
 class Order(models.Model):
-	pass
+	#if client removed - remove Order releated with him
+	#many Order to one Client
+	Client = models.ForeignKey(Client, on_delete=models.CASCADE)
+
+	#if paytype is creditcard - payinfo will get card id
+	PayType = models.CharField(max_length=128)
+	PayInfo = models.CharField(max_length=128)
+	#many orders to one delivery address
+	DeliveryAddress = models.ForeignKey(DeliveryAddress, on_delete=models.SET_NULL)
+	#чаевые
+	TipsCount = models.FloatField()
+	TotalCost = models.FloatField()
+	DeliveryCost = models.FloatField()
+	AddingDate = models.DateTimeField(auto_now_add=True)
+	#на когда заказали
+	OnWhenDate = models.DateTimeField()
+	DeliveredDate = models.DateTimeField()
+	Status = models.CharField(max_length=128)
+	TimePeriod = models.OneToOneField(TimePeriod, on_delete=models.CASCADE)
+	#CourierTakedMoney = 
+
+#for 1 dish
+class OrderPosition(models.Model):
+	#many OrderPosition to one order
+	Order = models.ForeignKey(Order, on_delete=models.CASCADE)
 
 class TimePeriod(models.Model):
 	# use json.
@@ -56,6 +82,10 @@ class TimePeriod(models.Model):
 	# 5 - Saturday
 	# 6 - Sunday
 	DaysOfWeek = models.CharField(max_length=128)
+
+	# use format "hours:minuts:seconds"
+	StartTime = models.CharField(max_length=128)
+	StopTime = models.CharField(max_length=128)
 
 # https://habr.com/ru/post/313764/
 # https://docs.djangoproject.com/en/3.0/topics/auth/customizing/
@@ -90,3 +120,14 @@ class CreditCard(models.Model):
 	CardType = models.CharField(max_length=128) #Visa/mastercard/american express
 	LastFourDigits = models.CharField(max_length=4)
 	AddingDate = models.DateTimeField(auto_now_add=True)
+	ExpireDate = models.DateTimeField()
+
+class Taxe(models.Model):
+	EnglishName = models.CharField(max_length=128)
+	SecondName = models.CharField(max_length=128)
+	ValuePercent = models.FloatField()
+
+class Package(models.Model):
+	Name = models.CharField(max_length=128)
+	Price = models.FloatField()
+	SalePrice = models.FloatField()
