@@ -4,9 +4,9 @@ Use `db` instead of `127.0.0.1` to access database.
 Because we use docker.
 
 ###### To start server use:
-`sudo docker-compose up` 
+`sudo docker-compose up --build` 
 
-`sudo docker-compose up -d` - start and detach(run as daemon)
+`sudo docker-compose up -d --build` - start and detach(run as daemon)
 
 
 To access bash in running docker container:

@@ -182,7 +182,7 @@ class Order(models.Model):
 	PayType = models.CharField(max_length=128)
 	PayInfo = models.CharField(max_length=128)
 	#many orders to one delivery address
-	DeliveryAddress = models.ForeignKey(DeliveryAddress, on_delete=models.SET_NULL)
+	DeliveryAddress = models.ForeignKey(DeliveryAddress, on_delete=models.SET_NULL, null=True)
 	#чаевые
 	TipsCount = models.FloatField()
 	TotalCost = models.FloatField()
@@ -194,7 +194,7 @@ class Order(models.Model):
 	DeliveredDate = models.DateTimeField()
 
 	TimePeriod = models.OneToOneField(TimePeriod, on_delete=models.CASCADE)
-	CourierTakedMoney = models.OneToOneField(Courier, on_delete=models.SET_NULL)
+	CourierTakedMoney = models.OneToOneField(Courier, on_delete=models.SET_NULL, null=True)
 
 	Status = models.CharField(max_length=128)
 	#Status can be: new, sent_to_kitchen, in_cook_process, in_delivery_process, delivered, rejected, delayed
@@ -211,7 +211,7 @@ class OrderPosition(models.Model):
 	Discount = models.FloatField()
 	Taxe = models.ForeignKey(Taxe, on_delete=models.CASCADE)
 
-	Courier = models.ForeignKey(Courier, on_delete=models.SET_NULL)
+	Courier = models.ForeignKey(Courier, on_delete=models.SET_NULL, null=True)
 
 	#datetimes
 	AddingDate = models.DateTimeField(auto_now_add=True)
