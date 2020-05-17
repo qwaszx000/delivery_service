@@ -52,6 +52,7 @@ class Restaurant(models.Model):
 	#types
 	Type = models.CharField(max_length=12)#simple/dark-kitchen/both
 	TypesOfCusine = models.ManyToManyField(CuisineType)
+	SectionMenus = models.ManyToManyField(RestaurantSectionMenu)
 	#imgs
 	SliderImgBigEng = models.ImageField(upload_to="uploads/img/eng/big/")
 	SliderImgSmallEng = models.ImageField(upload_to="uploads/img/eng/small/")
@@ -64,6 +65,7 @@ class Topping(models.Model):
 	SecondName = models.CharField(max_length=128)
 	PricePurchase = models.FloatField()
 	PriceSell = models.FloatField()
+	Restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE)
 
 #snack
 class Accompaniment(models.Model)
@@ -71,6 +73,7 @@ class Accompaniment(models.Model)
 	SecondName = models.CharField(max_length=128)
 	PricePurchase = models.FloatField()
 	PriceSell = models.FloatField()
+	Restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE)
 
 #example - roasting level for meat
 class Modification(models.Model):
@@ -158,13 +161,20 @@ class Client(models.Model):
 	#auto_now_add=True 
 	#Automatically set the field to now when the object is first created.
 	RegisterData = models.DateTimeField(auto_now_add=True)
-	LastLoginDate = models.DateTimeField(auto_now_add=True)
+	LastLoginDate = models.DateTimeField(auto_now=True)
 
 class Manager(models.Model):
 	User = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+	#One manager - one restaurant
+	Restaurant = models.OneToOneField(Restaurant, on_delete=models.CASCADE)
+	BattaryCharge = models.SmallIntegerField()
+	LastLoginDate = models.DateTimeField(auto_now=True)
 
 class Courier(models.Model):
 	User = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+	Color = models.CharField(max_length=7) #example "#000000"
+	LastLoginDate = models.DateTimeField(auto_now=True)
+
 
 class DeliveryAddress(models.Model):
 	#if client removed - remove address releated with him
@@ -197,12 +207,14 @@ class Package(models.Model):
 	Price = models.FloatField()
 	SalePrice = models.FloatField()
 
-
-
 class CuisineType(models.Model):
 	EnglishName = models.CharField(max_length=128)
 	SecondName = models.CharField(max_length=128)
 
 class DishTag(models.Model):
+	EnglishName = models.CharField(max_length=128)
+	SecondName = models.CharField(max_length=128)
+
+class RestaurantSectionMenu(models.Model):
 	EnglishName = models.CharField(max_length=128)
 	SecondName = models.CharField(max_length=128)

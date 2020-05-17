@@ -13,6 +13,7 @@ admin.site.register(CuisineType)
 admin.site.register(DishTag)
 
 admin.site.register(Restaurant)
+admin.site.register(RestaurantSectionMenu)
 admin.site.register(Order)
 admin.site.register(TimePeriod)
 admin.site.register(OrderPosition)
