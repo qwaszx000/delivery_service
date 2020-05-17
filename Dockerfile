@@ -6,7 +6,7 @@ WORKDIR /src
 #install dependencies
 RUN pip install pipenv
 COPY Pipfile Pipfile.lock /src/
-RUN pipenv install --system
+RUN pipenv install --system 
 
 #copy project
-COPY . /src/
+COPY . ./
