@@ -9,4 +9,4 @@ COPY Pipfile Pipfile.lock /src/
 RUN pipenv install --system 
 
 #copy project
-COPY . ./
+COPY . /src/
