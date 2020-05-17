@@ -17,10 +17,9 @@ services:
 
   web:
     build: .
-    command: python ./site/manage.py runserver 0.0.0.0:80 --noreload
+    command: python3 ./site/manage.py runserver 0.0.0.0:80 --noreload
     volumes:
       - ./site:/src/site/
-      - ./api:/src/api/
     ports:
       - 80:80
     depends_on:

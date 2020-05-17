@@ -1,11 +1,11 @@
 from django.contrib import admin
-from delivery_django.api.models import *
+from .models import *
 
 # Register your models here.
  
 admin.site.register(Dish)
 admin.site.register(Topping)
-admin.site.register(Accompaniments)
+admin.site.register(Accompaniment)
 admin.site.register(Modification)
 admin.site.register(Taxe)
 admin.site.register(Package)
