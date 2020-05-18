@@ -16,13 +16,13 @@
 
 ## api methods:
 
-### /api/login/ 
+* ### /api/login/ 
 #### POST data: 
 ##### username: String 
 ##### password: String
 #### Returns json response with result "code" and "msg".
 #### Also setups cookie "sessionid"
 
-### /api/logout/ 
+* ### /api/logout/ 
 #### Returns json response with result "code" and "msg".
 #### Removes cookie "sessionid" so user is logged out
