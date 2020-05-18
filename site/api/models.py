@@ -91,7 +91,7 @@ class Restaurant(models.Model):
 	CoordinatesLatitude = models.FloatField()
 
 	Phone = models.CharField(max_length=16)
-	DiscountGiven = models.BooleanField()
+	DiscountGiven = models.FloatField()
 	StandartCookingTime = models.SmallIntegerField()
 	#more info
 	MoreInfoEnglish = models.TextField()
