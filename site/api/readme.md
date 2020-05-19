@@ -16,17 +16,17 @@
 
 ## api methods:
 
-### /api/login/ 
+* ### /api/login/ 
 #### POST data: 
 ##### username: String 
 ##### password: String
 #### Returns json response with result "code", "msg" and "sessionid".
 #### Also setups cookie "sessionid"
 
-### /api/logout/ 
+* ### /api/logout/ 
 #### Returns json response with result "code" and "msg".
 #### Removes cookie "sessionid" so user is logged out
 
-### /api/check/
+* ### /api/check/
 #### Returns json response with result "code" and "msg".
 #### Msg contains current user type(manager|courier|client)
