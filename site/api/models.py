@@ -1,5 +1,7 @@
 from django.db import models
 from django.conf import settings
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 # Create your models here.
 
@@ -9,13 +11,15 @@ from django.conf import settings
 class Client(models.Model):
 	User = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
-	Name = models.CharField(max_length=128)
-	Surname = models.CharField(max_length=128)
-	Phone = models.CharField(max_length=16)
+	Name = models.CharField(max_length=128, null=True)
+	Surname = models.CharField(max_length=128, null=True)
+	Phone = models.CharField(max_length=16, null=True)
 	#auto_now_add=True 
 	#Automatically set the field to now when the object is first created.
 	RegisterData = models.DateTimeField(auto_now_add=True)
 	LastLoginDate = models.DateTimeField(auto_now=True)
+
+	isClient = models.BooleanField(default=True)
 
 class CuisineType(models.Model):
 	EnglishName = models.CharField(max_length=128)
@@ -115,17 +119,44 @@ class Restaurant(models.Model):
 class Manager(models.Model):
 	User = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 	#One manager - one restaurant
-	Restaurant = models.OneToOneField(Restaurant, on_delete=models.CASCADE)
-	BattaryCharge = models.SmallIntegerField()
+	Restaurant = models.OneToOneField(Restaurant, on_delete=models.SET_NULL, null=True, blank=True)
+	BattaryCharge = models.SmallIntegerField(default=100, null=True)
 	LastLoginDate = models.DateTimeField(auto_now=True)
+
+	isManager = models.BooleanField(default=False)
 
 # https://habr.com/ru/post/313764/
 # https://docs.djangoproject.com/en/3.0/topics/auth/customizing/
 #using one to one connection
 class Courier(models.Model):
 	User = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-	Color = models.CharField(max_length=7) #example "#000000"
+	Color = models.CharField(max_length=7, default='#555555', null=True) #example "#000000"
 	LastLoginDate = models.DateTimeField(auto_now=True)
+
+	CoordinatesLongtitude = models.FloatField(null=True)
+	CoordinatesLatitude = models.FloatField(null=True)
+
+
+	isCourier = models.BooleanField(default=False)
+
+@receiver(post_save, sender=settings.AUTH_USER_MODEL)
+def create_user(sender, instance, created, **kwargs):
+	if created:
+		Client.objects.create(User=instance)
+		Manager.objects.create(User=instance)
+		Courier.objects.create(User=instance)
+
+@receiver(post_save, sender=settings.AUTH_USER_MODEL)
+def save_user(sender, instance, **kwargs):
+	try:
+		instance.client.save()
+		instance.manager.save()
+		instance.courier.save()
+	#if user dont have client, manager and courier models
+	except Exception:
+		Client.objects.create(User=instance)
+		Manager.objects.create(User=instance)
+		Courier.objects.create(User=instance)
 
 #additional ingredient
 class Topping(models.Model):
