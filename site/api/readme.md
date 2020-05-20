@@ -13,6 +13,9 @@
  * 1 success
  * -1 bad request method
  * -2 login required
+ * -3 permission denied
+ * -4 bad params
+ * -5 user not found
 
 ## api methods:
 
@@ -27,6 +30,13 @@
 #### Returns json response with result "code" and "msg".
 #### Removes cookie "sessionid" so user is logged out
 
-* ### /api/check/
+* ### /api/type/check/
 #### Returns json response with result "code" and "msg".
 #### Msg contains current user type(manager|courier|client)
+
+* ### /api/type/set/
+#### POST data: 
+##### username: String
+##### type: String
+#### Changes user type
+#### Returns json response with result "code", "msg" and "type".

@@ -10,8 +10,8 @@ def loginUser(request):
 	if not request.method == "POST":
 		return JsonResponse({'code': -1, 'msg': "Bad method.\nUse Post"})
 
-	username = request.GET.get('username', '')
-	password = request.GET.get('password', '')
+	username = request.POST.get('username', '')
+	password = request.POST.get('password', '')
 
 	user = authenticate(request, username=username, password=password)
 	if user is not None:

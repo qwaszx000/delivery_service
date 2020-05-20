@@ -18,9 +18,10 @@ admin.site.register(Order)
 admin.site.register(TimePeriod)
 admin.site.register(OrderPosition)
 
-admin.site.register(Client)
 admin.site.register(DeliveryAddress)
 admin.site.register(CreditCard)
+admin.site.register(ShopCart)
 
+admin.site.register(Client)
 admin.site.register(Manager)
 admin.site.register(Courier)
