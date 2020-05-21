@@ -2,8 +2,8 @@ from django.shortcuts import render
 from django.http import JsonResponse
 from api.models import *
 from django.contrib.auth.models import User
-from django.core import serializers
 from api.tools import models as tools
+#import json
 
 # Create your views here.
 # api calls allowed only for managers
@@ -46,9 +46,9 @@ def getOrders(request):
 
 	#Status can be: new, sent_to_kitchen, in_cook_process, in_delivery_process, delivered, rejected, delayed
 	if filtering_type == 'all':
-		orders = serializers.serialize('json', Order.objects.all())
+		orders = list(Order.objects.all().values())
 	elif filtering_type in ['new', 'sent_to_kitchen', 'in_cook_process', 'in_delivery_process', 'delivered', 'rejected', 'delayed']:
-		orders = serializers.serialize('json', Order.objects.filter(Status=filtering_type))
+		orders = list(Order.objects.filter(Status=filtering_type).values())
 	else:
 		return JsonResponse({'code': -4, 'msg': 'Bad filter'})
 
@@ -77,6 +77,6 @@ def getOrderDetails(request, order_id=1):
 	if not request.user.manager.isManager == True:
 		return JsonResponse({'code': -3, 'msg': "Denied.\nOnly managers allowed"})
 
-	order = serializers.serialize('json', [Order.objects.get(pk=order_id),])
+	order = list(Order.objects.filter(pk=order_id).values())[0]
 
 	return JsonResponse({'code': 1, 'msg': "Send order", 'order': order})
