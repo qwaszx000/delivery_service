@@ -2,14 +2,16 @@ from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import render
 from django.http import JsonResponse
 from api.models import *
-from api.tools.models import *
+from api.tools import models as tools
 
 # Create your views here.
+# api calls allowed to every user
 
 def loginUser(request):
 	if not request.method == "POST":
 		return JsonResponse({'code': -1, 'msg': "Bad method.\nUse Post"})
 
+	#if empty input - set it to ''
 	username = request.POST.get('username', '')
 	password = request.POST.get('password', '')
 
@@ -32,4 +34,4 @@ def logoutUser(request):
 
 #returns type of current user manager, courier or client
 def checkMyType(request):
-	return JsonResponse({'code': 1, 'msg': get_user_type(request.user)})
+	return JsonResponse({'code': 1, 'msg': tools.get_user_type(request.user)})
