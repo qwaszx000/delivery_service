@@ -34,7 +34,7 @@
 #### Returns json response with result "code" and "msg".
 #### Msg contains current user type(manager|courier|client)
 
-### Manager APIs
+### Manager APIs:
 * ### /api/type/set/
 #### POST data: 
 ##### username: String
@@ -56,6 +56,12 @@
 ##### filter: String. Can be 'all', 'new', 'sent_to_kitchen', 'in_cook_process', 'in_delivery_process', 'delivered', 'rejected' or 'delayed'
 #### Returns json response with result "code", "msg" and "orders".
 
-### Courier APIs
+### Courier APIs:
+* ### /api/coordinates/set/
+#### POST data: 
+##### longtitude: Float
+##### latitude: Float
+#### Sets courier coordinates
+#### Returns json response with result "code", "msg"
 
-### Client APIs
+### Client APIs:

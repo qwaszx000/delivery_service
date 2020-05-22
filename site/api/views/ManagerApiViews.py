@@ -1,9 +1,8 @@
-from django.shortcuts import render
 from django.http import JsonResponse
-from api.models import *
+from django.utils import timezone
 from django.contrib.auth.models import User
+from api.models import *
 from api.tools import models as tools
-#import json
 
 # Create your views here.
 # api calls allowed only for managers
@@ -33,26 +32,7 @@ def setUserType(request):
 
 	return JsonResponse({'code': 1, 'msg': 'success', 'type': newType})
 
-#returns list of orders
-# /api/orders/get/
-def getOrders(request):
-	#check request method and is user manager
-	if not request.method == "GET":
-		return JsonResponse({'code': -1, 'msg': "Bad method.\nUse GET"})
-	elif not request.user.manager.isManager == True:
-		return JsonResponse({'code': -3, 'msg': "Denied.\nOnly managers allowed"})
 
-	filtering_type = request.GET.get('filter', 'all')
-
-	#Status can be: new, sent_to_kitchen, in_cook_process, in_delivery_process, delivered, rejected, delayed
-	if filtering_type == 'all':
-		orders = list(Order.objects.all().values())
-	elif filtering_type in ['new', 'sent_to_kitchen', 'in_cook_process', 'in_delivery_process', 'delivered', 'rejected', 'delayed']:
-		orders = list(Order.objects.filter(Status=filtering_type).values())
-	else:
-		return JsonResponse({'code': -4, 'msg': 'Bad filter'})
-
-	return JsonResponse({'code': 1, 'msg': 'Send orders', 'orders': orders})
 
 #managers app sends this request each 10 minutes
 # /api/charge/set/
@@ -67,16 +47,7 @@ def setBattaryCharge(request):
 	charge = request.POST.get('charge', 100)
 
 	request.user.manager.BattaryCharge = int(charge)
+	request.user.manager.LastLoginDate = timezone.now()
 	request.user.save()
 
 	return JsonResponse({'code': 1, 'msg': "BattaryCharge changed!"})
-
-# /api/order/details/<order_id>
-def getOrderDetails(request, order_id=1):
-	#check is user manager
-	if not request.user.manager.isManager == True:
-		return JsonResponse({'code': -3, 'msg': "Denied.\nOnly managers allowed"})
-
-	order = list(Order.objects.filter(pk=order_id).values())[0]
-
-	return JsonResponse({'code': 1, 'msg': "Send order", 'order': order})

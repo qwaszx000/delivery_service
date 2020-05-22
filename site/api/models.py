@@ -121,7 +121,7 @@ class Manager(models.Model):
 	#One manager - one restaurant
 	Restaurant = models.OneToOneField(Restaurant, on_delete=models.SET_NULL, null=True, blank=True)
 	BattaryCharge = models.SmallIntegerField(default=100, null=True, blank=True)
-	LastLoginDate = models.DateTimeField(auto_now=True)
+	LastLoginDate = models.DateTimeField()
 
 	isManager = models.BooleanField(default=False)
 
@@ -131,7 +131,7 @@ class Manager(models.Model):
 class Courier(models.Model):
 	User = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 	Color = models.CharField(max_length=7, default="#555555", null=True, blank=True) #example "#000000"
-	LastLoginDate = models.DateTimeField(auto_now=True)
+	LastLoginDate = models.DateTimeField()
 
 	CoordinatesLongtitude = models.FloatField(null=True, blank=True)
 	CoordinatesLatitude = models.FloatField(null=True, blank=True)
@@ -226,8 +226,7 @@ class Order(models.Model):
 	DeliveredDate = models.DateTimeField()
 
 	TimePeriod = models.OneToOneField(TimePeriod, on_delete=models.CASCADE)
-	CourierTakedMoney = models.OneToOneField(Courier, on_delete=models.SET_NULL, null=True, blank=True)
-
+	Courier = models.OneToOneField(Courier, on_delete=models.SET_NULL, null=True, blank=True)
 	Status = models.CharField(max_length=128, default="new")
 	#Status can be: new, sent_to_kitchen, in_cook_process, in_delivery_process, delivered, rejected, delayed
 
