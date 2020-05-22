@@ -24,3 +24,4 @@ def setUserType(user, newtype):
 		user.client.isClient = True
 	else:
 		return -1
+
