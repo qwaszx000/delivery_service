@@ -56,6 +56,13 @@
 ##### filter: String. Can be 'all', 'new', 'sent_to_kitchen', 'in_cook_process', 'in_delivery_process', 'delivered', 'rejected' or 'delayed'
 #### Returns json response with result "code", "msg" and "orders".
 
+* ### /api/order/confirm/<order_id>
+#### POST data: 
+##### time: Int - in minutes
+#### Changes order status to 'sent_to_kitchen'
+#### sets CookingTime of order to summ of cooking time of restourants or to POST value "time"
+#### Returns json response with result "code", "msg".
+
 ### Courier APIs:
 * ### /api/coordinates/set/
 #### POST data: 
@@ -63,5 +70,9 @@
 ##### latitude: Float
 #### Sets courier coordinates
 #### Returns json response with result "code", "msg"
+
+* ### /api/orders/courier_get/
+#### Returns json response with result "code", "msg" and "orders"
+#### Orders contains orders for current courier
 
 ### Client APIs:

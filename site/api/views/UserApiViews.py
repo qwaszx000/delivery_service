@@ -49,11 +49,11 @@ def courierGetOrders(request):
 	return JsonResponse({'code': 1, 'msg': 'Send orders', 'orders': orders})
 
 # /api/order/take/<order_id>
-def takeOrder(request):
+def takeOrder(request, order_id):
 	pass
 
 # /api/order/give/<order_id>
-def giveOrder(request):
+def giveOrder(request, order_id):
 	pass
 
 ###############MANAGER################
@@ -103,7 +103,20 @@ def setBattaryCharge(request):
 #manager confirms order
 # /api/order/confirm/<order_id>
 def confirmOrder(request, order_id):
-	pass
+	if not tools.get_user_type(request.user) in ['manager']:
+		return JsonResponse({'code': -3, 'msg': "Denied.\nOnly managers allowed"})
+
+	cookingTime = request.POST.get('time', 0)
+	if cookingTime == 0:
+		for orderPosition in OrderPosition.objects.filter(Order__pk=order_id):
+			cookingTime += int(orderPosition.Restaurant.StandartCookingTime)
+
+	order = Order.objects.get(pk=order_id)
+	order.Status = "sent_to_kitchen"
+	order.CookingTime = cookingTime
+	order.save()
+
+	return JsonResponse({'code': 1, 'msg': "Order confirmed"})
 
 ########MANAGER and COURIER###########
 # /api/order/details/<order_id>

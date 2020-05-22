@@ -96,6 +96,7 @@ class Restaurant(models.Model):
 
 	Phone = models.CharField(max_length=16)
 	DiscountGiven = models.FloatField()
+	#minutes
 	StandartCookingTime = models.SmallIntegerField()
 	#more info
 	MoreInfoEnglish = models.TextField(default="", null=True, blank=True)
@@ -224,6 +225,8 @@ class Order(models.Model):
 	#на когда заказали
 	OnWhenDate = models.DateTimeField()
 	DeliveredDate = models.DateTimeField()
+	#minutes
+	CookingTime = models.SmallIntegerField(blank=True, null=True)
 
 	TimePeriod = models.ManyToManyField(TimePeriod)
 	Couriers = models.ManyToManyField(Courier, blank=True)
