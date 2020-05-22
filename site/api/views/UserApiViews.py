@@ -25,6 +25,29 @@ def trackCourier(request):
 
 	return JsonResponse({'code': 1, 'msg': "Coordinates sent successful"})
 
+# /api/orders/courier_get/
+def courierGetOrders(request):
+	#check request method and is user manager or courier
+	if not request.method == "GET":
+		return JsonResponse({'code': -1, 'msg': "Bad method.\nUse GET"})
+	elif not tools.get_user_type(request.user) in ['courier']:
+		return JsonResponse({'code': -3, 'msg': "Denied.\nOnly couriers allowed"})
+
+
+	courier = request.user.courier
+	filtering_type = request.GET.get('filter', 'all')
+
+	#Status can be: new, sent_to_kitchen, in_cook_process, in_delivery_process, delivered, rejected, delayed
+	if filtering_type == 'all':
+		orders = list(Order.objects.filter(Couriers__pk__contains=courier.pk).values())
+	elif filtering_type in ['new', 'sent_to_kitchen', 'in_cook_process', 'in_delivery_process', 'delivered', 'rejected', 'delayed']:
+		orders = Order.objects.filter(Couriers__pk__contains=courier.pk)
+		orders = list(orders.filter(Status=filtering_type).values())
+	else:
+		return JsonResponse({'code': -4, 'msg': 'Bad filter'})
+
+	return JsonResponse({'code': 1, 'msg': 'Send orders', 'orders': orders})
+
 # /api/order/take/<order_id>
 def takeOrder(request):
 	pass

@@ -13,6 +13,7 @@ urlpatterns = [
 	path('coordinates/set/', UserApiViews.trackCourier, name="trackCourier"),
 	###orders
 	path('order/details/<int:order_id>', UserApiViews.getOrderDetails, name="getOrderDetails"),
+	path('orders/courier_get/', UserApiViews.courierGetOrders, name="courierGetOrders"),
 	path('orders/get/', UserApiViews.getOrders, name="getOrders"),
 	path('order/take/<int:order_id>', UserApiViews.takeOrder, name="takeOrder"),
 	path('order/give/<int:order_id>', UserApiViews.giveOrder, name="giveOrder"),
