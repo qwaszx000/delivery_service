@@ -226,7 +226,7 @@ class Order(models.Model):
 	DeliveredDate = models.DateTimeField()
 
 	TimePeriod = models.OneToOneField(TimePeriod, on_delete=models.CASCADE)
-	Courier = models.OneToOneField(Courier, on_delete=models.SET_NULL, null=True, blank=True)
+	Couriers = models.ManyToManyField(Courier, blank=True)
 	Status = models.CharField(max_length=128, default="new")
 	#Status can be: new, sent_to_kitchen, in_cook_process, in_delivery_process, delivered, rejected, delayed
 
