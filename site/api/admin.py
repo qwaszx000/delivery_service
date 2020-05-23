@@ -3,25 +3,28 @@ from .models import *
 
 # Register your models here.
  
-admin.site.register(Dish)
-admin.site.register(Topping)
-admin.site.register(Accompaniment)
-admin.site.register(Modification)
-admin.site.register(Taxe)
-admin.site.register(Package)
-admin.site.register(CuisineType)
-admin.site.register(DishTag)
+class ShowIdAdmin(admin.ModelAdmin):
+	readonly_fields = ('id',)
 
-admin.site.register(Restaurant)
-admin.site.register(RestaurantSectionMenu)
-admin.site.register(Order)
-admin.site.register(TimePeriod)
-admin.site.register(OrderPosition)
+admin.site.register(Dish, ShowIdAdmin)
+admin.site.register(Topping, ShowIdAdmin)
+admin.site.register(Accompaniment, ShowIdAdmin)
+admin.site.register(Modification, ShowIdAdmin)
+admin.site.register(Taxe, ShowIdAdmin)
+admin.site.register(Package, ShowIdAdmin)
+admin.site.register(CuisineType, ShowIdAdmin)
+admin.site.register(DishTag, ShowIdAdmin)
 
-admin.site.register(DeliveryAddress)
-admin.site.register(CreditCard)
-admin.site.register(ShopCart)
+admin.site.register(Restaurant, ShowIdAdmin)
+admin.site.register(RestaurantSectionMenu, ShowIdAdmin)
+admin.site.register(Order, ShowIdAdmin)
+admin.site.register(TimePeriod, ShowIdAdmin)
+admin.site.register(OrderPosition, ShowIdAdmin)
 
-admin.site.register(Client)
-admin.site.register(Manager)
-admin.site.register(Courier)
+admin.site.register(DeliveryAddress, ShowIdAdmin)
+admin.site.register(CreditCard, ShowIdAdmin)
+admin.site.register(ShopCart, ShowIdAdmin)
+
+admin.site.register(Client, ShowIdAdmin)
+admin.site.register(Manager, ShowIdAdmin)
+admin.site.register(Courier, ShowIdAdmin)

@@ -53,7 +53,7 @@
 
 * ### /api/orders/get/
 #### POST data: 
-##### filter: String. Can be 'all', 'new', 'sent_to_kitchen', 'in_cook_process', 'in_delivery_process', 'delivered', 'rejected' or 'delayed'
+##### status_filter: String. Can be 'all', 'new', 'sent_to_kitchen', 'in_cook_process', 'in_delivery_process', 'delivered', 'rejected' or 'delayed'
 #### Returns json response with result "code", "msg" and "orders".
 
 * ### /api/order/confirm/<order_id>

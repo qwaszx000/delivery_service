@@ -30,20 +30,15 @@ def courierGetOrders(request):
 	#check request method and is user manager or courier
 	if not request.method == "GET":
 		return JsonResponse({'code': -1, 'msg': "Bad method.\nUse GET"})
-	elif not tools.get_user_type(request.user) in ['courier']:
+	elif not request.user.courier.isCourier == True:
 		return JsonResponse({'code': -3, 'msg': "Denied.\nOnly couriers allowed"})
 
 
 	courier = request.user.courier
-	filtering_type = request.GET.get('filter', 'all')
+	status_filter = request.GET.get('status_filter', 'all')
 
-	#Status can be: new, sent_to_kitchen, in_cook_process, in_delivery_process, delivered, rejected, delayed
-	if filtering_type == 'all':
-		orders = list(Order.objects.filter(Couriers__pk__contains=courier.pk).values())
-	elif filtering_type in ['new', 'sent_to_kitchen', 'in_cook_process', 'in_delivery_process', 'delivered', 'rejected', 'delayed']:
-		orders = Order.objects.filter(Couriers__pk__contains=courier.pk)
-		orders = list(orders.filter(Status=filtering_type).values())
-	else:
+	orders = tools.getOrdersList(courier.pk, status_filter)
+	if orders == -1:
 		return JsonResponse({'code': -4, 'msg': 'Bad filter'})
 
 	return JsonResponse({'code': 1, 'msg': 'Send orders', 'orders': orders})
@@ -103,7 +98,7 @@ def setBattaryCharge(request):
 #manager confirms order
 # /api/order/confirm/<order_id>
 def confirmOrder(request, order_id):
-	if not tools.get_user_type(request.user) in ['manager']:
+	if not request.user.manager.isManager == True:
 		return JsonResponse({'code': -3, 'msg': "Denied.\nOnly managers allowed"})
 
 	cookingTime = request.POST.get('time', 0)
@@ -114,6 +109,18 @@ def confirmOrder(request, order_id):
 	order = Order.objects.get(pk=order_id)
 	order.Status = "sent_to_kitchen"
 	order.CookingTime = cookingTime
+	order.save()
+
+	return JsonResponse({'code': 1, 'msg': "Order confirmed"})
+
+#manager confirms order position
+# /api/orderposition/confirm/<order_id>
+def confirmOrder(request, order_id):
+	if not request.user.manager.isManager == True:
+		return JsonResponse({'code': -3, 'msg': "Denied.\nOnly managers allowed"})
+
+	order = OrderPosition.objects.get(pk=order_id)
+	order.Status = "sent_to_kitchen"
 	order.save()
 
 	return JsonResponse({'code': 1, 'msg': "Order confirmed"})
@@ -186,3 +193,7 @@ def logoutUser(request):
 #returns type of current user manager, courier or client
 def checkMyType(request):
 	return JsonResponse({'code': 1, 'msg': tools.get_user_type(request.user)})
+
+#filter by timeperiod, 
+def getDishList(request):
+	pass
